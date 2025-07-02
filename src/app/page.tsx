@@ -27,19 +27,19 @@ export default function Home() {
   };
 
   const onLogin = () => {
-      authClient.signIn.email({
-        email,
-        password,
+    authClient.signIn.email({
+      email,
+      password,
 
-      }, {
-        onError: () => {
-          window.alert('fail');
-        },
-        onSuccess: () => {
-          window.alert('success');
-        }
-      });
-    };
+    }, {
+      onError: () => {
+        window.alert('fail');
+      },
+      onSuccess: () => {
+        window.alert('success');
+      }
+    });
+  };
   if (session) {
     return (
       <div className='p-4 flex flex-col gap-y-4'>
@@ -49,7 +49,7 @@ export default function Home() {
     );
   }
   return (
-    <div className='flex flex-col gap-y-10'> 
+    <div className='flex flex-col gap-y-10'>
       <div className='p-4 flex flex-col gap-y-4'>
         <input
           type="name"
