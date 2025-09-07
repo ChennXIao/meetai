@@ -12,7 +12,7 @@ import { authClient } from "@/lib/auth-client";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 
 import {
     Form,
@@ -145,12 +145,12 @@ export const SignInView = () => {
                         </div>
                         <div className="mt-4 text-center text-sm">
                             Don't have an account?{" "}
-                            <Link href="/auth/sign-up" className="underline">
+                            <Link href="/sign-up" className="underline">
                                 Sign up
                             </Link>
                         </div>
                     </div>
-                    <div className="bg-radial from-green-700 to-green-900 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+                    <div className="bg-radial from-sidebar-accent to-sidebar relative hidden md:flex flex-col gap-y-4 items-center justify-center">
                         <img src="/logo.svg" alt="image" className="h-[92px] w-[92px]" />
                         <p className="text-white text-center fon">
                             Meet.ai
