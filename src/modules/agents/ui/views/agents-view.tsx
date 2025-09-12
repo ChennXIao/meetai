@@ -4,11 +4,13 @@ import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { LoadingState } from "@/components/loading-state";
 import { ErrorState } from "@/components/error-state";
+import { ResponsiveDialog } from "@/components/responsive-dialog";
+import { Button } from "@/components/ui/button";
 
 export const AgentsView = () => {
   const trpc = useTRPC();
   // Use the useSuspenseQuery hook to fetch data
-  const { data } = useSuspenseQuery(trpc.agent.getMany.queryOptions());
+  const { data } = useSuspenseQuery(trpc.agents.getMany.queryOptions());
 
   return (
     <div>

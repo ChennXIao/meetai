@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
 import { SearchIcon } from "lucide-react"
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import { cn } from "@/lib/utils"
 import {
@@ -11,7 +12,17 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
+
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerClose,
+  DrawerDescription,
+} from "@/components/ui/drawer";
+
 
 function Command({
   className,
@@ -29,7 +40,8 @@ function Command({
   )
 }
 
-function CommandDialog({
+// customized provided function
+function CommandResponsiveDialog({
   title = "Command Palette",
   description = "Search for a command to run...",
   children,
@@ -42,6 +54,24 @@ function CommandDialog({
   className?: string
   showCloseButton?: boolean
 }) {
+  const isMobile = useIsMobile();
+  if (isMobile) {
+    return (
+      <Drawer {...props}>
+        <DrawerContent className="overflow-hidden p-0">
+          <DrawerHeader>
+            {title && <DrawerTitle>{title}</DrawerTitle>}
+            <DrawerDescription>{description}</DrawerDescription>
+            <DrawerClose />
+          </DrawerHeader>  
+          <Command className="[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]]:px-2 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
+            {children}
+          </Command>
+        </DrawerContent>
+      </Drawer>
+    )
+  }
+
   return (
     <Dialog {...props}>
       <DialogHeader className="sr-only">
@@ -173,7 +203,7 @@ function CommandShortcut({
 
 export {
   Command,
-  CommandDialog,
+  CommandResponsiveDialog,
   CommandInput,
   CommandList,
   CommandEmpty,
