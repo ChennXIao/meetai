@@ -40,7 +40,7 @@ export const AgentForm = ({
         trpc.agents.create.mutationOptions({
             onSuccess: () => {
                 // invalidation isssue to be refresh 5:25:00
-                queryClient.invalidateQueries(trpc.agents.getMany.queryOptions());
+                queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
                 if (initialValue?.id) {
                     trpc.agents.getOne.queryOptions({ id: initialValue.id });
                 }         
