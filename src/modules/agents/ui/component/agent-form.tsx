@@ -50,6 +50,21 @@ export const AgentForm = ({
             }
         }),
     );
+    const updateAgent = useMutation(
+        trpc.agents.update.mutationOptions({
+            onSuccess: () => {
+                // invalidation isssue to be refresh 5:25:00
+                // fix render issue after update from getMany to getOne(update/delete vid)
+                queryClient.invalidateQueries(trpc.agents.getOne.queryOptions({ id: initialValue!.id }));
+                if (initialValue?.id) {
+                    trpc.agents.getOne.queryOptions({ id: initialValue.id });
+                }         
+            },
+            onError: (error) => {
+                toast.error(`Failed to create agent: ${error.message}`);
+            }
+        }),
+    );
 
     const form = useForm<z.infer<typeof agentsInsertSchema>>({
         resolver: zodResolver(agentsInsertSchema),
@@ -61,11 +76,13 @@ export const AgentForm = ({
 
     // not sure what isEdit and isPending used for
     const isEdit = !!initialValue;
-    const isPending = createAgent.isPending;
-
+    const isPending = createAgent.isPending || updateAgent.isPending;
     const onSubmit = (values: z.infer<typeof agentsInsertSchema>) => {
         if (isEdit) {
-            console.log("Edit mode is not implemented yet");
+            updateAgent.mutate({
+                id: initialValue!.id,
+                ...values
+            });
         } else {
             createAgent.mutate(values);
         }
@@ -110,7 +127,7 @@ export const AgentForm = ({
                     )}
                 />
                 <div className="flex justify-end space-x-2">
-                    <Button 
+                    <Button
                         variant="ghost" 
                         onClick={onCancel} 
                         disabled={isPending}
@@ -119,7 +136,7 @@ export const AgentForm = ({
                         Cancel
                     </Button>
                     <Button type="submit" disabled={isPending}>
-                        {isEdit ? "Updata" : "Create"}
+                        {isEdit ? "Update" : "Create"}
                     </Button>
                 </div>
             </form>

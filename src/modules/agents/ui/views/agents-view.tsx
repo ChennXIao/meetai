@@ -11,8 +11,10 @@ import { columns } from "../component/columns";
 import { EmptyState } from "@/components/empty-state";
 import { useAgentsFilters } from "../../hooks/use-agents-filters";
 import { Datapagination } from "@/modules/agents/ui/component/agents-data-pagination";
+import { useRouter } from "next/navigation";
 
 export const AgentsView = () => {
+  const router = useRouter();
   const [filters, setFilters] = useAgentsFilters();
   const trpc = useTRPC();
   // Use the useSuspenseQuery hook to fetch data
@@ -22,7 +24,11 @@ export const AgentsView = () => {
 
   return (
       <div className="flex-1 pb-4 px-4 md:px-8 flex flex-col gap-y-4">
-      <DataTable columns={columns} data={data.items} />
+      <DataTable
+        columns={columns} 
+        data={data.items} 
+        onRowClick={(row)=>router.push(`/agents/${row.id}`)}
+        />
       <Datapagination
         page={filters.page}
         totalPage={data.totalPages}
