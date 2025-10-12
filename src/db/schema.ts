@@ -1,5 +1,7 @@
 import { nanoid } from "nanoid";
-import { pgTable, text, timestamp, boolean, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, integer, pgEnum } from "drizzle-orm/pg-core";
+import { stat } from "fs";
+import { en } from "zod/v4/locales";
 
 export const user = pgTable("user", {
        id: text('id').primaryKey(),
@@ -56,3 +58,22 @@ export  const agents = pgTable("agents", {
        createdAt: timestamp('created_at').defaultNow().notNull(),
        updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export const meetingStatusEnum = pgEnum("meeting_status", ["upcoming", "active", "completed", "canceled", "pending"]);
+
+export  const meetings = pgTable("meetings", {
+       // not sure what nanoid do here
+       id: text('id').primaryKey().$default(nanoid),
+       name: text('name').notNull(),
+       agentId: text('agent_id').notNull().references(() => agents.id, { onDelete: 'cascade' }),
+       status: meetingStatusEnum('status').default('upcoming'),
+       userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+       endAt: timestamp('end_at'),
+       startAt: timestamp('start_at'),
+       transcriptUrl: text('transcript_url'),
+       recordingUrl: text('recording_url'),
+       summary: text('summary'),
+       createdAt: timestamp('created_at').defaultNow().notNull(),
+       updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
